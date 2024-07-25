@@ -9,9 +9,9 @@ import Cocoa
 */
 
 // optX is optional using ? it can be unwrapped to get value using !
-var optX: Int? = 10
+var optX: Int?
 print(optX)
-print(optX!)
+//print(optX!)
 
 
 

@@ -96,6 +96,8 @@ let stringNums = nums.map { (number) -> String in
 
 print(stringNums)
 
+
+
 // capturing values //
 func makeIncrement(forInc amount: Int) -> () -> Int {
     var runningTotal = 0
@@ -109,4 +111,31 @@ func makeIncrement(forInc amount: Int) -> () -> Int {
 let incrementMe2 = makeIncrement(forInc: 5)
 print(incrementMe2())
 print(incrementMe2())
+
+
+func funWait(ClosWait: ()->()) {
+    
+    
+    ClosWait()
+    
+    for i in 0...100000 {
+        print("Function : \(i)")
+    }
+    print("Done")
+    
+}
+
+funWait(ClosWait: {
+    DispatchQueue.global().async{
+        for i in 0...100000 {
+            print("Closure : \(i)")
+        }
+    }
+    
+})
+
+
+
+    
+
 
