@@ -40,82 +40,86 @@ retry(times: 3) {
 }
 */
 
-protocol Pet {
-    var name: String? {get set}
-    func makeSound()
-}
-
-class Cat: Pet {
-    var name: String?
+//
+func test(hello: ()->()) {
     
-    init(name: String? = nil) {
-        self.name = name
+    for i in 1...100 {
+        print("Test: I am at \(i)")
     }
     
-    func makeSound() {
-        print("meow")
-    }
-}
-
-class Person {
-    var name: String
-    var pets: [Pet]?
+    hello()
     
-    // failable constructor
-    init?(name: String) {
-        guard !name.isEmpty else {return nil}
-        self.name = name
-    }
+    
+    print("Test: I am done")
 }
 
 
-// so person is instance of optional<Person> cos of failable, not instance of Person
-let person = Person(name: "James")
-let pet = Cat(name: "Bella")
+test() {
+    for i in 1...100 {
+        print("Hello: I am at \(i)")
+    }
+}
 
-person?.pets = [pet]
-
-let newPet = Cat()
-
-person?.pets?.append(newPet)
-
-// now setting newPet name
-person?.pets?[1].name = "Whisker"
-
-let petName = person?.pets?[1].name
-
-print("Pet Name: \(petName!)\tType: \(type(of: petName))")
-
-// calling function through chaining
-person?.pets?[0].makeSound()
-
-
-
-let names = ["Alex", "John", "Lilly"]
-let persons = names.map(Person.init)
-
-let randomCat: Cat = Cat()
-persons[0]?.pets = [randomCat]
-
-print(type(of: persons[0]?.pets?[0].name))
 
 /*
-    - in an optional chain, a question mark must be placed
-    immediately after the name of any optional in the chain
-    (peron?.pets?[0].name)
- 
-    - question mark after the square brackets in an optional
-    chain in cases where the instance on which we are using a
-    subscript to retrieve a value is not an optional, but the
-    value thus retrieved, which we want to use to set or retrieve
-    the value of a property, or call a method, is an optional
-    (persons[0]?.pets?[0])
- 
+
+
+
+// creating model
+struct Post: Codable {
+    let userId: Int?
+    let id: Int?
+    let title: String?
+    let body: String?
+}
+
+func fetchPost(completionHandler: @escaping ([Post])-> Void) {
+    let url = URL(string: "https://jsonplaceholder.typicode.com/posts")!
+    
+    let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+        if let error = error {
+            print("Error fetching posts: \(error)")
+        }
+        
+        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+            print("Error Unexpected Status Code")
+            return
+            }
+        
+        if let data = data, let postSummary = try? JSONDecoder().decode([Post].self, from: data) {
+            completionHandler(postSummary)
+        }
+        
+        
+    })
+    
+    task.resume()
+}
+
+var posts: [Post]?
+
+fetchPost { (post) in
+    posts = post
+    
+    for post in posts! {
+        print("ID: \(post.id!)\nTitle: \(post.title!)")
+    }
+}
+
 */
 
-persons[0]?.pets?[0].name = "Fluffy"
+func testing () async throws {
+    for i in 1...5000 {
+        print(i)
+    }
+    print("hello one")
+}
 
-let randomPersonaCat = persons[0]?.pets?[0].name
-print(randomPersonaCat!)
 
-
+do {
+    try await testing()
+    print("Hello two")
+}
+catch {
+    print("I am error")
+}
