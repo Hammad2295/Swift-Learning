@@ -2,6 +2,9 @@ import Cocoa
 
 /*
     OPTIONAL CHAINING:
+    (optional chaining is used, which allows us to use the wrapped
+    instance without having to unwrap the optional.)
+    
     Optional chaining is a process for querying and calling properties,
     methods, and subscripts on an optional that might currently be nil.
  
