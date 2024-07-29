@@ -41,24 +41,8 @@ retry(times: 3) {
 */
 
 //
-func test(hello: ()->()) {
-    
-    for i in 1...100 {
-        print("Test: I am at \(i)")
-    }
-    
-    hello()
-    
-    
-    print("Test: I am done")
-}
 
 
-test() {
-    for i in 1...100 {
-        print("Hello: I am at \(i)")
-    }
-}
 
 
 /*
@@ -108,6 +92,80 @@ fetchPost { (post) in
 
 */
 
+
+
+func generateRandoArray(size: Int, max: Int, num: Int) async throws -> [Int] {
+    var arrIntOne: [Int] = []
+    for i in 0...max {
+        let randomNum = Int.random(in: 1...max)
+        arrIntOne.insert(randomNum, at: i)
+        print("Print of \(num)\t\(i)")
+    }
+    print("Done \(num)")
+    return arrIntOne
+}
+
+Task  {
+    async let arr1: [Int] = try generateRandoArray(size: 5000, max: 100, num: 1)
+    print("stat --- 1")
+}
+Task {
+    async let arr: [Int] = try generateRandoArray(size: 5000, max: 100, num: 2)
+    print("stat --- 2")
+}
+
+
+
+
+func testOne(helloOne: ()->()) {
+    
+    for i in 1...100 {
+        print("TestOne: I am at \(i)")
+    }
+    
+    
+    helloOne()
+    
+    print("----------- TestOne: I am done ------------")
+}
+
+
+testOne() {
+    for i in 1...100 {
+        print("HelloOne: I am at \(i)")
+    }
+}
+
+
+
+
+
+func testTwo(helloTwo: @escaping ()->()) {
+    
+    for i in 1...100 {
+        print("Test Two: I am at \(i)")
+    }
+    
+    DispatchQueue.main.async {
+        helloTwo()
+    }
+    
+    print("------ Test Two: I am done --------- ")
+}
+
+
+testTwo() {
+    for i in 1...100 {
+        print("Hello Two: I am at \(i)")
+    }
+}
+
+
+
+
+
+
+
 func testing () async throws {
     for i in 1...5000 {
         print(i)
@@ -115,11 +173,15 @@ func testing () async throws {
     print("hello one")
 }
 
+Task {
+    do {
+        try await testing()
+        print("Hello two")
+    }
+    catch {
+        print("I am error")
+    }
+}
 
-do {
-    try await testing()
-    print("Hello two")
-}
-catch {
-    print("I am error")
-}
+
+

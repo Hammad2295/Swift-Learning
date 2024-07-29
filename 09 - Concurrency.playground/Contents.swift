@@ -65,7 +65,7 @@ func generateRandoArray(size: Int, max: Int, num: Int) async throws -> [Int] {
 
 Task  {
     do {
-        async let arr1: [Int] = try generateRandoArray(size: 5000, max: 10000, num: 1)
+        async let arr1: [Int] = try generateRandoArray(size: 5000, max: 1000, num: 1)
     } catch {
         print("Hello error!")
     }
@@ -74,9 +74,11 @@ Task  {
 
 
 Task(priority: .background) {
-    async let arr: [Int] = try generateRandoArray(size: 5000, max: 10000, num: 3)
+    async let arr: [Int] = try generateRandoArray(size: 5000, max: 1000, num: 3)
     print("stat---2")
 }
+
+
 
 
 
