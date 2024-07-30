@@ -157,7 +157,6 @@ myCar1.delegate = driver
 myCar1.startEngine()
 
 
-
 // Declaring Protocol Adoption with an Extension
 protocol TextRepresentable {
     var textualDescription: String { get }
@@ -177,4 +176,102 @@ let simonTheHamster = Hamster(name: "Simon")
 let representation: TextRepresentable = simonTheHamster
 print(representation.textualDescription)
 
+
+
+
+// Optional Protocols //
+@objc protocol NetworkLog {
+    func enteryLog()
+    func exitlog()
+    @objc optional func updateLog()
+}
+
+
+class Server : NetworkLog {
+    
+    func enteryLog() {
+        print("User has Signed In!")
+    }
+    
+    func exitlog() {
+        print("User has Signed Out!")
+    }
+}
+
+
+let myServer = Server()
+myServer.enteryLog()
+myServer.exitlog()
+
+
+
+// Optional Protocols with Delegate
+@objc protocol BanDeletgate:AnyObject {
+    @objc optional func permanentBan()
+    func temporaryBan()
+}
+
+
+class DiscUser {
+    var isBreak: Bool
+    var reports: Int
+    var attempts: Int
+    var discServerDelegate: BanDeletgate?
+    var authServerDelegate: BanDeletgate?
+    
+    init(isBreak: Bool, reports: Int, attempts: Int) {
+        self.isBreak = isBreak
+        self.reports = reports
+        self.attempts = attempts
+    }
+    
+    func isBreakHappen() {
+        if isBreak {
+            discServerDelegate?.permanentBan?()
+        }
+    }
+    
+    func isReported() {
+        if reports == 5 {
+            discServerDelegate?.temporaryBan()
+        }
+    }
+    
+    func isLimitReached() {
+        if attempts == 3 {
+            authServerDelegate?.temporaryBan()
+        }
+    }
+    
+}
+
+class DiscServer : BanDeletgate {
+    
+//    func permanentBan() {
+//        print("User has permanently banned!")
+//    }
+    
+    func temporaryBan() {
+        print("User has temporarily banned! Reports Limit Reached")
+    }
+}
+
+class AuthServer : BanDeletgate {
+    
+    func temporaryBan() {
+        print("User has temporarily banned! Login Attempts Limit Reached")
+    }
+}
+
+
+let userOne = DiscUser(isBreak: true, reports: 5, attempts: 3)
+let discServer = DiscServer()
+let authServer = AuthServer()
+
+userOne.discServerDelegate = discServer
+userOne.authServerDelegate = authServer
+
+userOne.isBreakHappen()
+userOne.isReported()
+userOne.isLimitReached()
 
