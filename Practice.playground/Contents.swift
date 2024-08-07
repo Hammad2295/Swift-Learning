@@ -1,5 +1,150 @@
 import Cocoa
 
+class C {
+    var c: Int
+    init(_ c: Int) {
+        self.c = c
+    }
+}
+class B {
+    var b: C?
+}
+class A {
+    var a: B?
+}
+
+let x = A()
+x.a = B()
+x.a?.b = C(5)
+
+
+x.a?.b?.c = 10
+
+if let val = x.a?.b?.c {
+    print(val)
+} else {
+    print("nil")
+}
+    
+var y: Int = 0
+
+// y.c = x.a?.b?.c
+if let num = x.a?.b?.c {
+    y = num
+}
+else {
+    print("is nil")
+}
+
+print("y: \(y)")
+
+
+// optional chaining
+class Band {
+    var leadGuitarist: Guitarist?
+}
+class Guitarist {
+    var guitar: Guitar?
+}
+class Guitar {
+    var brand: String?
+}
+
+let myBand = Band()
+myBand.leadGuitarist = Guitarist()
+myBand.leadGuitarist?.guitar = Guitar()
+myBand.leadGuitarist?.guitar?.brand = "Hello"
+
+if let brandValue = myBand.leadGuitarist?.guitar?.brand {
+    print("brand is: \(brandValue)")
+}
+else {
+    print("No Value")
+}
+
+
+var x: Int?
+
+// fallback or default value
+print(x ?? 5)
+
+// Forced unwrapping
+// print(x!)
+
+// optional binding
+if let actualValue = x {
+    print(actualValue)
+} else {
+    print("Still Nil")
+}
+
+
+func checkIfOpt(_ i: Int?) {
+    guard let unwrapped = i  else {
+        print ("is nil")
+        return
+    }
+}
+checkIfOpt(x)
+
+
+func evaluateMe(iclosure: @autoclosure ()-> String) {
+    print("I am Inside Auto Closure Function")
+    print(iclosure())
+   
+}
+
+evaluateMe(iclosure: "Hello")
+
+
+func makeIncrementer(incrementAmount: Int) -> () -> Int {
+    var total = 0
+
+    let incrementer: () -> Int = {
+        total += incrementAmount
+        return total
+    }
+
+    return incrementer
+}
+
+let incrementByTwo = makeIncrementer(incrementAmount: 2)
+
+print(incrementByTwo())
+
+print(incrementByTwo())
+
+
+func test(iamclosure: (Int)->Void) {
+    var y = 10
+    print("Value of Y in function: \(y)")
+    
+    iamclosure(y)
+}
+
+test() { someVar in
+    print("Value of Y in closure: \(someVar)")
+}
+
+
+
+var me = 10
+func heha(closureisme: @escaping ()->Void) {
+    
+    print("printing inside function before return, me is: \(me)")
+    DispatchQueue.main.async {
+        closureisme()
+    }
+    me = 100
+}
+
+heha() {
+    print("printing inside closure, me is: \(me)")
+}
+
+
+
+
 /*
 func makeCounter() -> () -> Int {
     var count = 0
